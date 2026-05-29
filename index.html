@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Digital Services</title>
+    <style>
+        /* Base Styles & Reset */
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(to bottom, #ffffff, #f8fafc);
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 2rem auto;
+            font-size: 1.1rem;
+        }
+
+        /* Services Section */
+        .services {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .service-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .service-price {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 1rem 0;
+        }
+
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.2s;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* Modal / Checkout Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .checkout-header {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .payment-methods {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .payment-method {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .payment-method.active {
+            border-color: var(--primary-color);
+            background-color: #eff6ff;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-main);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .bank-details {
+            display: none;
+            background-color: #f1f5f9;
+            padding: 1rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-color);
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav>
+            <a href="#" class="logo">Nexus Services</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>Expert Solutions for Your Business</h1>
+            <p>Seamlessly purchase professional services. Secure, fast, and reliable delivery.</p>
+        </section>
+
+        <section class="services">
+            <!-- Service 1 -->
+            <div class="service-card">
+                <h3>IT Support & Consulting</h3>
+                <p style="color: var(--text-muted); margin-top: 0.5rem;">Comprehensive technical support, troubleshooting, and infrastructure optimization.</p>
+                <div class="service-price">$150 / hr</div>
+                <button class="btn" onclick="openCheckout('IT Support & Consulting', 150)">Purchase Service</button>
+            </div>
+
+            <!-- Service 2 -->
+            <div class="service-card">
+                <h3>Micro-SaaS Architecture</h3>
+                <p style="color: var(--text-muted); margin-top: 0.5rem;">End-to-end setup and strategy for launching scalable digital product platforms.</p>
+                <div class="service-price">$499</div>
+                <button class="btn" onclick="openCheckout('Micro-SaaS Architecture', 499)">Purchase Service</button>
+            </div>
+
+            <!-- Service 3 -->
+            <div class="service-card">
+                <h3>Digital Product Strategy</h3>
+                <p style="color: var(--text-muted); margin-top: 0.5rem;">Market research, funnel creation, and launch planning for your next big project.</p>
+                <div class="service-price">$299</div>
+                <button class="btn" onclick="openCheckout('Digital Product Strategy', 299)">Purchase Service</button>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Nexus Services. All rights reserved.</p>
+    </footer>
+
+    <!-- Checkout Modal -->
+    <div class="modal-overlay" id="checkoutModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeCheckout()">&times;</button>
+            
+            <div class="checkout-header">
+                <h2>Secure Checkout</h2>
+                <p id="checkoutItemName" style="color: var(--text-muted); margin-top: 0.25rem;"></p>
+                <p id="checkoutItemPrice" style="font-weight: bold; font-size: 1.25rem; color: var(--primary-color);"></p>
+            </div>
+
+            <div class="payment-methods">
+                <div class="payment-method active" id="btn-card" onclick="togglePayment('card')">
+                    Credit / Debit Card
+                </div>
+                <div class="payment-method" id="btn-bank" onclick="togglePayment('bank')">
+                    Bank Transfer
+                </div>
+            </div>
+
+            <!-- Credit Card Form -->
+            <div id="card-form">
+                <div class="form-group">
+                    <label>Cardholder Name</label>
+                    <input type="text" placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label>Card Number</label>
+                    <input type="text" placeholder="0000 0000 0000 0000">
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label>Expiry Date</label>
+                        <input type="text" placeholder="MM/YY">
+                    </div>
+                    <div class="form-group">
+                        <label>CVV</label>
+                        <input type="text" placeholder="123">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bank Transfer Details -->
+            <div id="bank-details" class="bank-details">
+                <p><strong>Bank Name:</strong> Global Tech Bank</p>
+                <p><strong>Account Name:</strong> Nexus Services LLC</p>
+                <p><strong>IBAN:</strong> UA00 0000 0000 0000 0000 00</p>
+                <p><strong>SWIFT/BIC:</strong> GLTBXX</p>
+                <p style="margin-top: 0.5rem; color: var(--text-muted);">*Please include your order ID in the transfer reference. Services will begin upon receipt of funds.</p>
+            </div>
+
+            <button class="btn" style="margin-top: 1rem;" onclick="processPayment()">Complete Payment</button>
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById('checkoutModal');
+        const cardForm = document.getElementById('card-form');
+        const bankDetails = document.getElementById('bank-details');
+        const btnCard = document.getElementById('btn-card');
+        const btnBank = document.getElementById('btn-bank');
+
+        function openCheckout(itemName, price) {
+            document.getElementById('checkoutItemName').innerText = `Service: ${itemName}`;
+            document.getElementById('checkoutItemPrice').innerText = `Total: $${price}`;
+            modal.style.display = 'flex';
+        }
+
+        function closeCheckout() {
+            modal.style.display = 'none';
+        }
+
+        function togglePayment(method) {
+            if (method === 'card') {
+                btnCard.classList.add('active');
+                btnBank.classList.remove('active');
+                cardForm.style.display = 'block';
+                bankDetails.style.display = 'none';
+            } else {
+                btnBank.classList.add('active');
+                btnCard.classList.remove('active');
+                cardForm.style.display = 'none';
+                bankDetails.style.display = 'block';
+            }
+        }
+
+        function processPayment() {
+            alert('Payment processing initiated! In a real application, this would connect to a gateway like Stripe or PayPal.');
+            closeCheckout();
+        }
+
+        // Close modal if clicked outside
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeCheckout();
+            }
+        }
+    </script>
+</body>
+</html>
